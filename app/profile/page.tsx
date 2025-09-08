@@ -2,9 +2,9 @@
 
 import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
-import { User, Building, Mail, Phone, Calendar, Edit, Save, X, Plus } from 'lucide-react';
+import { User, Building, Mail, Phone, Calendar, Edit, Save, X, Plus, DollarSign, MapPin } from 'lucide-react';
 import { getCurrentUser } from '../../lib/auth';
-import { User as UserType } from '../../types';
+import { User as UserType, FundingRequest } from '../../types';
 
 export default function ProfilePage() {
   const router = useRouter();
@@ -17,6 +17,7 @@ export default function ProfilePage() {
     phone: '',
     preferences: [] as string[]
   });
+  const [userFundingRequests, setUserFundingRequests] = useState<FundingRequest[]>([]);
 
   useEffect(() => {
     const user = getCurrentUser();
@@ -33,6 +34,12 @@ export default function ProfilePage() {
       phone: '',
       preferences: user.preferences || []
     });
+
+    if (user.role === 'Buyer') {
+      const storedFundingRequests = JSON.parse(localStorage.getItem('fundingRequests') || '[]') as FundingRequest[];
+      const filteredRequests = storedFundingRequests.filter(req => req.userId === user.id);
+      setUserFundingRequests(filteredRequests);
+    }
   }, [router]);
 
   const handleInputChange = (field: string, value: string) => {
@@ -307,6 +314,52 @@ export default function ProfilePage() {
                 </div>
               </div>
             </div>
+
+            {/* User's Funding Requests Section */}
+            {currentUser.role === 'Buyer' && userFundingRequests.length > 0 && (
+              <div className="mt-12 space-y-6">
+                <h2 className="text-xl font-semibold text-gray-900 border-b border-gray-200 pb-2">
+                  My Funding Requests
+                </h2>
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                  {userFundingRequests.map((request) => (
+                    <div key={request.id} className="bg-white border border-gray-200 rounded-lg shadow-sm p-5">
+                      <h3 className="text-lg font-semibold text-gray-900 mb-2">{request.title}</h3>
+                      <p className="text-sm text-gray-600 mb-3">{request.description.substring(0, 100)}...</p>
+                      <div className="flex items-center text-sm text-gray-700 mb-1">
+                        <DollarSign className="w-4 h-4 mr-2 text-gray-500" />
+                        Purchase Price: ${request.purchasePrice.toLocaleString()}
+                      </div>
+                      <div className="flex items-center text-sm text-gray-700 mb-1">
+                        <MapPin className="w-4 h-4 mr-2 text-gray-500" />
+                        Location: {request.location}
+                      </div>
+                      <div className="flex justify-end mt-4">
+                        <button
+                          onClick={() => router.push(`/listings/${request.id}`)}
+                          className="text-blue-600 hover:text-blue-800 font-medium text-sm"
+                        >
+                          View Details
+                        </button>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            )}
+
+            {currentUser.role === 'Buyer' && userFundingRequests.length === 0 && (
+              <div className="mt-12 p-8 bg-gray-100 rounded-lg text-center text-gray-500">
+                <p>You haven't created any funding requests yet.</p>
+                <button
+                  onClick={() => router.push('/create-listing')}
+                  className="mt-4 bg-blue-600 text-white px-6 py-3 rounded-lg hover:bg-blue-700 transition-colors flex items-center mx-auto"
+                >
+                  <Plus className="w-4 h-4 mr-2" />
+                  Create Your First Listing
+                </button>
+              </div>
+            )}
 
             {/* Action Buttons */}
             {isEditing && (

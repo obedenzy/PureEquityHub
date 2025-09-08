@@ -2,17 +2,19 @@ import './globals.css';
 import type { Metadata } from 'next';
 import { Inter } from 'next/font/google';
 import Header from '../components/Header';
+import { Toaster } from '@/components/ui/toaster'; // Import Toaster
 
 const inter = Inter({ subsets: ['latin'] });
 
 export const metadata: Metadata = {
+  metadataBase: new URL('https://pureequityhub.com'),
   title: 'PureEquityHub - SBA 7a Loan Equity Injection Marketplace',
-  description: 'Connect investors with buyers seeking 10% equity injection for SBA 7a loans, business acquisition equity, and real estate equity financing. $100K-$25M deals.',
-  keywords: 'SBA loan equity injection, SBA 7a equity, business acquisition equity, real estate equity financing, equity injection marketplace, SBA loan funding, business equity investment',
+  description: 'Connect investors with buyers seeking 10% equity injection for SBA 7a loans, Non-SBA Loan, and real estate equity financing. $100K-$25M deals.',
+  keywords: 'SBA loan equity injection, SBA 7a equity, Non-SBA Loan, real estate equity financing, equity injection marketplace, SBA loan funding, business equity investment',
   authors: [{ name: 'PureEquityHub' }],
   openGraph: {
     title: 'PureEquityHub - SBA 7a Loan Equity Injection Marketplace',
-    description: 'Connect investors with buyers seeking 10% equity injection for SBA 7a loans, business acquisition equity, and real estate equity financing. $100K-$25M deals.',
+    description: 'Connect investors with buyers seeking 10% equity injection for SBA 7a loans, Non-SBA Loan, and real estate equity financing. $100K-$25M deals.',
     url: 'https://pureequityhub.com',
     siteName: 'PureEquityHub',
     images: [
@@ -29,7 +31,7 @@ export const metadata: Metadata = {
   twitter: {
     card: 'summary_large_image',
     title: 'PureEquityHub - SBA 7a Loan Equity Injection Marketplace',
-    description: 'Connect investors with buyers seeking 10% equity injection for SBA 7a loans, business acquisition equity, and real estate equity financing.',
+    description: 'Connect investors with buyers seeking 10% equity injection for SBA 7a loans, Non-SBA Loan, and real estate equity financing.',
     images: ['https://images.pexels.com/photos/3182763/pexels-photo-3182763.jpeg'],
   },
 };
@@ -63,7 +65,7 @@ export default function RootLayout({
               },
               serviceType: [
                 'SBA 7a Loan Equity Injection',
-                'Business Acquisition Equity Financing',
+                'Non-SBA Loan Financing',
                 'Real Estate Equity Investment',
                 'Commercial Real Estate Financing'
               ],
@@ -82,6 +84,7 @@ export default function RootLayout({
       <body className={inter.className}>
         <Header />
         {children}
+        <Toaster /> {/* Add Toaster here */}
       </body>
     </html>
   );

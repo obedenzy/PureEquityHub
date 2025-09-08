@@ -1,3 +1,4 @@
+'use client';
 import Link from 'next/link';
 import { ArrowRight, Target, TrendingUp, Shield, Users, DollarSign, Building, Handshake, Video, FileCheck } from 'lucide-react';
 
